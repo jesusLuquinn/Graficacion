@@ -1,26 +1,9 @@
 function setup() {
   createCanvas(800, 500);
-  background(180);
+  background(150);
 }
 
 function draw() {
-  /*
-  stroke(0);
-  line(0,250,800,250);
-  line(400,0,400,800);
-  
-  fill(0,0,255);
-  noStroke();
-  circle(400,250,20);
-  
-  fill(0);
-  text("X: " + mouseX,10,20);
-  text("Y: " + mouseY,10,40);
-
-  fill(0, 100, 200);
-  circle(mouseX,mouseY,10);
-  */
-  
   stroke(0);
   line(30,20,185,20);
   stroke(126);
