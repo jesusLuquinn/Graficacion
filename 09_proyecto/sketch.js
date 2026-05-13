@@ -1,89 +1,129 @@
-let estrellas = [];
-let particulas = [];
-let animando = true;
+let rotX = 0;
+let rotY = 0;
+let mover = 0;
+let colorFondo = 20;
 
-function setup(){
-  createCanvas(600,400);
-  
-  // Crear estrellas
-  for(let i=0; i<80; i++){
-    estrellas.push({
-      x: random(width),
-      y: random(height),
-      t: random(1,3)
-    });
-  }
-  
-  // Crear partículas flotantes
-  for(let i=0; i<10; i++){
-    particulas.push(createVector(random(width), random(height)));
-  }
+function setup() {
+  createCanvas(windowWidth, windowHeight, WEBGL);
 }
 
-function draw(){
-  background(15,15,40); // azul oscuro noche
-  
-  dibujarEstrellas();
-  dibujarLuna();
-  moverParticulas();
-}
+function draw() {
+  background(colorFondo);
 
-function dibujarEstrellas(){
-  noStroke();
-  fill(255);
-  for(let e of estrellas){
-    circle(e.x, e.y, e.t);
-  }
-}
+  orbitControl();
 
-function dibujarLuna(){
+  ambientLight(80);
+
+  directionalLight(255, 255, 255, 1, 1, -1);
+
+  let locX = mouseX - width / 2;
+  let locY = mouseY - height / 2;
+  pointLight(255, 0, 0, locX, locY, 200);
+
+
   push();
-  translate(width-100,100);
-  rotate(frameCount * 0.01);
-  
-  fill(240,240,200);
-  stroke(200);
-  strokeWeight(2);
-  circle(0,0,80);
-  
+  rotateX(HALF_PI);
+  translate(0, 0, 200);
+
+  ambientMaterial(100, 100, 100);
+  plane(1000, 1000);
+  pop();
+
+  push();
+
+  translate(-250, 0, 0);
+
+  rotateY(frameCount * 0.01);
+
+  specularMaterial(0, 0, 255);
+
+  sphere(80);
+
+  pop();
+
+
+  push();
+
+  translate(0, mover, 0);
+
+  rotateX(frameCount * 0.02);
+  rotateY(frameCount * 0.02);
+
+  normalMaterial();
+
+  box(120);
+
+  pop();
+
+
+  push();
+
+  translate(250, 0, 0);
+
+  rotateZ(frameCount * 0.03);
+
+  ambientMaterial(0, 255, 100);
+
+  cone(70, 150);
+
+  pop();
+
+
+  push();
+
+  translate(0, -200, 0);
+
+  rotateX(frameCount * 0.02);
+  rotateY(frameCount * 0.02);
+
+  specularMaterial(255, 215, 0);
+
+  torus(80, 25);
+
+  pop();
+
+
+  push();
+
+  translate(0, 220, 0);
+
+  rotateY(frameCount * 0.015);
+
+  fill(255, 0, 255);
+
+  cylinder(60, 120);
+
+  pop();
+
+  push();
+  resetMatrix();
+
+  fill(255);
+  textSize(18);
+  text("Controles:", 20, 30);
+  text("← → mover cubo", 20, 55);
+  text("Click cambia fondo", 20, 80);
+
   pop();
 }
 
-function moverParticulas(){
-  for(let p of particulas){
-    
-    let mouse = createVector(mouseX, mouseY);
-    let direccion = p5.Vector.sub(p, mouse);
-    let d = direccion.mag();
-    
-    if(d < 80){
-      direccion.normalize();
-      direccion.mult(2);
-      p.add(direccion);
-    }
-    
-    // movimiento suave
-    p.x += sin(frameCount * 0.02 + p.x) * 0.5;
-    p.y += cos(frameCount * 0.02 + p.y) * 0.5;
-    
-    // cambio de color si mouse está cerca
-    if(d < 80){
-      fill(255,100,100);
-    } else {
-      fill(100,200,255);
-    }
-    
-    noStroke();
-    circle(p.x, p.y, 15);
+
+function keyPressed() {
+  if (keyCode === LEFT_ARROW) {
+    mover -= 20;
+  }
+
+  if (keyCode === RIGHT_ARROW) {
+    mover += 20;
   }
 }
 
-function mousePressed(){
-  if(animando){
-    noLoop();
-    animando = false;
-  } else {
-    loop();
-    animando = true;
-  }
+function mousePressed() {
+
+  colorFondo = random(0, 255);
+}
+
+// Ajustar pantalla
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
